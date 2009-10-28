@@ -78,7 +78,7 @@ var UploadProgressMethods = {
       var uploadProgress = Prototype.Browser.WebKit ? progressFrame.Prototype.uploadProgress : Prototype.uploadProgress;
       var uploadMovement = Prototype.Browser.WebKit ? progressFrame.Prototype.uploadMovement : Prototype.uploadMovement;
       options.server_timer = window.setInterval(function() { uploadProgress(this, options) }, options.interval);
-      options.client_timer = window.setInterval(function() { uploadMovement(this, options) {, options.client_interval);
+      options.client_timer = window.setInterval(function() { uploadMovement(this, options) }, options.client_interval);
     });
   }
 };
@@ -94,7 +94,7 @@ PrototypeUploadProgressMethods = {
       var bar = Prototype.Browser.WebKit ? parent.document.getElementById(options.progressBar) : $(options.progressBar);
       bar.setStyle({width: Math.floor(options.current_percent) + '%'});
     }
-  }
+  },
 
   uploadProgress: function(element, options) {
     new Ajax.Request(options.progressUrl, {
