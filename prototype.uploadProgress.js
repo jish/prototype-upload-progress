@@ -105,6 +105,12 @@ PrototypeUploadProgressMethods = {
         var miliseconds = current_time.getTime();
         upload.percents = Math.floor((upload.received / upload.size)*100);
         if (upload.state == 'uploading') {
+          var bar = Prototype.Browser.WebKit ?
+            parent.document.getElementById(options.progressBar) :
+            $(options.progressBar);
+          bar.setStyle({width: Math.floor(upload.percents) + '%'});
+          options.uploading(upload);
+
           if (miliseconds - previous_time !=0 && (100 - upload.percents) !=0) {
             options.rate = (upload.percents - options.previous_percent) * options.client_interval / (miliseconds - options.previous_time) * ( (100-options.current_percent) / (100 - upload.percents) )
             options.previous_time = miliseconds;
