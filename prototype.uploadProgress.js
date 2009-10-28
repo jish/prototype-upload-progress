@@ -7,28 +7,38 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *
  */
+
+var UploadProgress = {
+  config: {
+    clientInterval:     500,
+    interval:           10000,
+    progressBar:        "progressbar",
+    progressUrl:        "/progress",
+    previousPercent:    0,
+    previousTime:       0,
+    currentPercent:     0,
+    rate:               0,
+    uploadProgressPath: "/javascripts/prototype.uploadProgress.js",
+    prototypePath:      "/javascripts/prototype.js",
+    serverTimer:        "",
+    clientTimer:        ""
+  },
+
+  callbacks: {
+    start:     Prototype.emptyFunction,
+    uploading: Prototype.emptyFunction,
+    complete:  Prototype.emptyFunction,
+    success:   Prototype.emptyFunction,
+    error:     Prototype.emptyFunction
+  }
+};
+
 var UploadProgressMethods = {
   uploadProgress: function(element, options) {
-    options == options || {};
-    options = Object.extend({
-      client_interval: 500,
-      interval:10000,
-      progressBar: "progressbar",
-      progressUrl: "/progress",
-      previous_percent: 0,
-      previous_time: 0,
-      current_percent: 0,
-      rate: 0,
-      start: function() {},
-      uploading: function() {},
-      complete: function() {},
-      success: function() {},
-      error: function() {},
-      uploadProgressPath: '/javascripts/prototype.js',
-      prototypePath: '/javascripts/prototype.uploadProgress.js',
-      server_timer: "",
-      client_timer: ""
-    }, options);
+
+    Object.extend(UploadProgress.config, UploadProgress.callbacks);
+    Object.extend(UploadProgress.config, options);
+    options = UploadProgress.config;
 
     /* tried to add iframe after submit (to not always load it) but it won't work.
     safari can't get scripts properly while submitting files */
@@ -50,7 +60,7 @@ var UploadProgressMethods = {
       var b = d.body;
       var s = d.createElement('script');
       s.src = options.prototypePath;
-      /* must be sure that jquery is loaded */
+      /* must be sure that Prototype is loaded */
       s.onload = function() {
         var s1 = d.createElement('script');
         s1.src = options.uploadProgressPath;
