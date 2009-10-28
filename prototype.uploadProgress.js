@@ -10,18 +10,12 @@
 
 var UploadProgress = {
   config: {
-    clientInterval:     500,
     interval:           10000,
     progressBar:        "progressbar",
     progressUrl:        "/progress",
-    previousPercent:    0,
-    previousTime:       0,
-    currentPercent:     0,
-    rate:               0,
     uploadProgressPath: "/javascripts/prototype.uploadProgress.js",
     prototypePath:      "/javascripts/prototype.js",
     serverTimer:        "",
-    clientTimer:        ""
   },
 
   callbacks: {
@@ -101,22 +95,16 @@ PrototypeUploadProgressMethods = {
       parameters: 'X-Progress-ID='+ options.uuid,
       onSuccess: function(xhr){
         var upload = xhr.responseText.evalJSON();
-        var current_time = new Date();
-        var miliseconds = current_time.getTime();
         upload.percents = Math.floor((upload.received / upload.size)*100);
+
         if (upload.state == 'uploading') {
           var bar = Prototype.Browser.WebKit ?
             parent.document.getElementById(options.progressBar) :
             $(options.progressBar);
           bar.setStyle({width: Math.floor(upload.percents) + '%'});
           options.uploading(upload);
-
-          if (miliseconds - previous_time !=0 && (100 - upload.percents) !=0) {
-            options.rate = (upload.percents - options.previous_percent) * options.client_interval / (miliseconds - options.previous_time) * ( (100-options.current_percent) / (100 - upload.percents) )
-            options.previous_time = miliseconds;
-            options.previous_percent = upload.percents;
-          }
         }
+
         /* we are done, stop the interval */
         if (upload.state == 'done' || upload.state == 'error') {
           window.clearTimeout(options.server_timer);
