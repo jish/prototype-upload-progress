@@ -15,7 +15,7 @@ var UploadProgress = {
     progressUrl:        "/progress",
     uploadProgressPath: "/javascripts/prototype.uploadProgress.js",
     prototypePath:      "/javascripts/prototype.js",
-    serverTimer:        "",
+    timer:              "",
   },
 
   callbacks: {
@@ -81,7 +81,7 @@ var UploadProgressMethods = {
       }
 
       var uploadProgress = Prototype.Browser.WebKit ? progressFrame.Prototype.uploadProgress : Prototype.uploadProgress;
-      options.server_timer = window.setInterval(function() { uploadProgress(this, options) }, options.interval);
+      options.timer = window.setInterval(function() { uploadProgress(this, options) }, options.interval);
     });
   }
 };
@@ -107,7 +107,7 @@ PrototypeUploadProgressMethods = {
 
         /* we are done, stop the interval */
         if (upload.state == 'done' || upload.state == 'error') {
-          window.clearTimeout(options.server_timer);
+          window.clearTimeout(options.timer);
           options.complete(upload);
         }
 
