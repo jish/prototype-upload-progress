@@ -96,7 +96,12 @@ var UploadProgressMethods = {
 Element.addMethods(UploadProgressMethods);
 
 PrototypeUploadProgressMethods = {
+
+  // This method is throwing errors because upload_state is not defined
+  // Adding a check to see if upload_state is defined
   uploadMovement: function(element, options) {
+    if (typeof(upload_state) == "undefined") return;
+
     if (upload_state == 'done' || options.current_percent > 100) {
       window.clearTimeout(options.client_timer);
     } else {
