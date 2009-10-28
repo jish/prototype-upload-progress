@@ -85,10 +85,9 @@ var UploadProgressMethods = {
                         } else {
         $(this).writeAttribute("action", $(this).readAttribute("action") + "?X-Progress-ID=" + uuid);
       }
+
       var uploadProgress = Prototype.Browser.WebKit ? progressFrame.Prototype.uploadProgress : Prototype.uploadProgress;
-      var uploadMovement = Prototype.Browser.WebKit ? progressFrame.Prototype.uploadMovement : Prototype.uploadMovement;
       options.server_timer = window.setInterval(function() { uploadProgress(this, options) }, options.interval);
-      options.client_timer = window.setInterval(function() { uploadMovement(this, options) }, options.client_interval);
     });
   }
 };
@@ -96,21 +95,6 @@ var UploadProgressMethods = {
 Element.addMethods(UploadProgressMethods);
 
 PrototypeUploadProgressMethods = {
-
-  // This method is throwing errors because upload_state is not defined
-  // Adding a check to see if upload_state is defined
-  uploadMovement: function(element, options) {
-    if (typeof(upload_state) == "undefined") return;
-
-    if (upload_state == 'done' || options.current_percent > 100) {
-      window.clearTimeout(options.client_timer);
-    } else {
-      options.current_percent = options.current_percent + options.rate
-      var bar = Prototype.Browser.WebKit ? parent.document.getElementById(options.progressBar) : $(options.progressBar);
-      bar.setStyle({width: Math.floor(options.current_percent) + '%'});
-    }
-  },
-
   uploadProgress: function(element, options) {
     new Ajax.Request(options.progressUrl, {
       method: 'get',
